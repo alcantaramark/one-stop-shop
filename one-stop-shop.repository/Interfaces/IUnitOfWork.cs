@@ -6,6 +6,5 @@ public interface IUnitOfWork
 {
     #region Data Access
     IUserRepository UserRepository { get; }
-    Task<int> CommitAsync();
     #endregion
 }

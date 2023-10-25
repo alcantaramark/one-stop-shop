@@ -1,14 +1,16 @@
-﻿namespace one_stop_shop.model;
+﻿using System;
 
-public class BaseModel
+namespace one_stop_shop.dto;
+
+public class BaseModelDto
 {
     #region Constructors
-    public BaseModel()
+    public BaseModelDto()
     {
         Id = Guid.NewGuid();
         DateCreated = DateTime.UtcNow;
         DateModified = DateTime.UtcNow;
-        Deleted = false;
+        Deleted = false;   
     }
     #endregion
 

@@ -21,10 +21,6 @@ public class UnitOfWork: IUnitOfWork
     #region Implementations
     public IUserRepository UserRepository => _userRepository ?? new UserRepository(_context);
     
-    public async Task<int> CommitAsync()
-    {
-        return await _context.SaveChangesAsync();
-    }
     #endregion
 
     #region Public Methods
