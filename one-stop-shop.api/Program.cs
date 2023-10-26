@@ -17,7 +17,7 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnCh
 builder.Configuration.AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true);
 //Register Services
 builder.Services.AddDbContext<DataContext>(options => 
-    options.UseSqlServer(configuration.GetConnectionString("Default Connection String")));
+    options.UseSqlServer(configuration.GetConnectionString("AwsDatabase")));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IUserService, UserService>();
 

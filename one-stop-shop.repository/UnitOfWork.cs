@@ -24,9 +24,24 @@ public class UnitOfWork: IUnitOfWork
     #endregion
 
     #region Public Methods
-    public void Dispose()
+    public async Task DisposeAsync()
     {
-        _context.Dispose();
+        await _context.DisposeAsync();
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        await _context.Database.BeginTransactionAsync();
+    }
+
+    public async Task CommitAsync()
+    {
+        await _context.Database.CommitTransactionAsync();
+    }
+    
+    public async Task RollbackTransactionAsync()
+    {
+        await _context.Database.RollbackTransactionAsync();
     }
     #endregion
 }

@@ -28,19 +28,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         try
         {
-            await _context.Database.BeginTransactionAsync();
             await _context.Set<T>().AddAsync(model);
             await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
 
@@ -48,19 +41,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         try
         {
-            await _context.Database.BeginTransactionAsync();
             await _context.Set<T>().AddRangeAsync(models);
             await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
 
@@ -73,10 +59,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         catch (Exception ex)
         {
             throw ex;
-        }
-        finally
-        {
-            _context.DisposeAsync();
         }
     }
 
@@ -92,10 +74,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             throw ex;
         }
-        finally
-        {
-            _context.DisposeAsync();
-        }
     }
 
     public async Task<T> GetAsync(Expression<Func<T, bool>> where)
@@ -109,10 +87,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         catch (Exception ex)
         {
             throw ex;
-        }
-        finally
-        {
-            _context.DisposeAsync();
         }
     }
 
@@ -131,10 +105,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             throw ex;
         }
-        finally
-        {
-            await _context.DisposeAsync();
-        }
     }
 
     public async Task<IEnumerable<T>> GetAsync(int? page = null, int? pageSize = null)
@@ -152,10 +122,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             throw ex;
         }
-        finally
-        {
-            await _context.DisposeAsync();
-        }
     }
 
     public async Task RemoveAsync(Guid id)
@@ -163,19 +129,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         try
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            await _context.Database.BeginTransactionAsync();
             _context.Set<T>().Remove(entity);
             await _context.SaveChangesAsync();
-            await _context.Database.CommitTransactionAsync();
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
 
@@ -185,20 +144,13 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             await Task.Run(async () =>  
             { 
-                await _context.Database.BeginTransactionAsync();
                 _context.Set<T>().RemoveRange(models);
                 await _context.SaveChangesAsync();
-                await _context.Database.CommitTransactionAsync();
             });
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
 
@@ -208,7 +160,6 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             await Task.Run(async () =>
             {
-                await _context.Database.BeginTransactionAsync();
                 _context.Set<T>().Attach(model);
                 var dbEntry = _context.Entry(model);
                 
@@ -217,17 +168,11 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
                     dbEntry.Property(includedProperty).IsModified = true;
                 }
                 await _context.SaveChangesAsync();
-                await _context.Database.CommitTransactionAsync();
             });
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
 
@@ -237,21 +182,14 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         {
             await Task.Run(async () => 
             {
-                _context.Database.BeginTransaction();
                 _context.Set<T>();
                 _context.Entry(model).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                await _context.Database.CommitTransactionAsync();
             });
         }
         catch (Exception ex)
         {
-            await _context.Database.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _context.DisposeAsync();
         }
     }
     #endregion
