@@ -8,8 +8,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.12"/>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\one-stop-shop.datacontext\one-stop-shop.datacontext.csproj"/>
+    <ProjectReference Include="..\one-stop-shop.service\one-stop-shop.service.csproj"/>
   </ItemGroup>
 </Project>
