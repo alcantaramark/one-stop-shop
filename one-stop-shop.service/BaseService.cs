@@ -31,19 +31,12 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             T item = _mapper.Map<T>(model);
             await _entity.AddAsync(item);
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -51,19 +44,12 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             IEnumerable<T> items = _mapper.Map<IEnumerable<T>>(models);
             await _entity.AddAsync(items);
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -77,10 +63,6 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
         {
             throw ex;
         }
-        finally
-        {
-            _unitOfWork.DisposeAsync();
-        }
     }
 
     public async Task<M> GetAsync(Guid id)
@@ -92,10 +74,6 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
         catch (Exception ex)
         {
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -109,10 +87,6 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
         {
             throw ex;
         }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
-        }
     }
 
     public async Task<IEnumerable<M>> GetAsync(int? page = null, int? pageSize = null)
@@ -124,10 +98,6 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
         catch (Exception ex)
         {
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -141,48 +111,29 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
         {
             throw ex;
         }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
-        }
     }
 
     public async Task RemoveAsync(Guid id)
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             await _entity.RemoveAsync(id);
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
         }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
-        }
-
     }
 
     public async Task RemoveAsync(IEnumerable<M> models)
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             await _entity.RemoveAsync(_mapper.Map<T>(models));
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -190,18 +141,11 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             await _entity.RemoveAsync(_mapper.Map<T>(model), includedProperties);
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
-        }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
         }
     }
 
@@ -209,19 +153,32 @@ public abstract class BaseService<M, T, E> : IBaseService<M, T, E>
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
             await _entity.UpdateAsync(_mapper.Map<T>(model));
-            await _unitOfWork.CommitAsync();
         }
         catch (Exception ex)
         {
-            await _unitOfWork.RollbackTransactionAsync();
             throw ex;
         }
-        finally
-        {
-            await _unitOfWork.DisposeAsync();
-        }
+    }
+
+    public async Task CommitAsync()
+    {
+        await _unitOfWork.CommitAsync();
+    }
+
+    public async Task RollBackTransactionAsync()
+    {
+        await _unitOfWork.RollbackTransactionAsync();
+    }
+
+    public async Task BeginTransactionAsync()
+    {
+        await _unitOfWork.BeginTransactionAsync();
+    }
+
+    public async Task DisposeAsync()
+    {
+        await _unitOfWork.DisposeAsync();
     }
     #endregion
 }
