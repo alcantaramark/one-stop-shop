@@ -17,5 +17,9 @@ public interface IBaseService<M, T, E>
     Task RemoveAsync(Guid id);
     Task RemoveAsync(IEnumerable<M> models);
     Task RemoveAsync(M model, params Expression<Func<T, object>>[] includedProperties);
+    Task CommitAsync();
+    Task RollBackTransactionAsync();
+    Task BeginTransactionAsync();
+    Task DisposeAsync();
     #endregion
 }

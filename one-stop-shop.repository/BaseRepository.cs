@@ -67,7 +67,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         try
         {
             var entity = await _context.Set<T>().FindAsync(id);
-            _context.Entry(entity).State = EntityState.Detached;
+
+            if (entity is not null)
+            {
+                _context.Entry(entity).State = EntityState.Detached;
+            }
+            
             return entity;
         }
         catch (Exception ex)
@@ -81,7 +86,12 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         try
         {
             var entity = await _context.Set<T>().Where(where).FirstOrDefaultAsync();
-            _context.Entry(entity).State = EntityState.Detached;
+
+            if (entity is not null)
+            {
+                _context.Entry(entity).State = EntityState.Detached;
+            }
+
             return entity;
         }
         catch (Exception ex)
